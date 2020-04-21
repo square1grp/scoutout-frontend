@@ -31,7 +31,7 @@
                       class="min-price"
                       :formatter="value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
                       :parser="value => value.replace(/\$\s?|(,*)/g, '')"
-                      v-model="search_queries['min_price']"
+                      v-model="queries['min_price']"
                     />
                   </a-col>
                   <a-col :span="12">
@@ -40,7 +40,7 @@
                       class="max-price"
                       :formatter="value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
                       :parser="value => value.replace(/\$\s?|(,*)/g, '')"
-                      v-model="search_queries['max_price']"
+                      v-model="queries['max_price']"
                     />
                   </a-col>
                 </a-row>
@@ -49,7 +49,7 @@
 
             <a-form-item class="form-item">
               <a-col :span="24">
-                <a-input placeholder="Search Keyword" v-model="search_queries['keyword']" />
+                <a-input placeholder="Search Keyword" v-model="queries['keyword']" />
               </a-col>
             </a-form-item>
 
@@ -67,7 +67,6 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import axios from "axios";
 
 export default {
   beforeCreate() {
@@ -75,7 +74,7 @@ export default {
   },
   data() {
     return {
-      search_queries: {
+      queries: {
         categories: {},
         sites: {},
         keyword: ""
@@ -93,27 +92,16 @@ export default {
   },
   methods: {
     ...mapActions("sites", ["getAllSites"]),
+    ...mapActions("searchResults", ["searchItems"]),
     onCategoriesChange(categories) {
-      this.search_queries["categories"] = categories;
+      this.queries["categories"] = categories;
     },
     onSitesChange(sites) {
-      this.search_queries["sites"] = sites;
+      this.queries["sites"] = sites;
     },
-    handleSubmit(e) {
-      e.preventDefault();
-
-      axios
-        .post(
-          process.env.VUE_APP_API_ENDPOINT + "/search-items",
-          this.search_queries
-        )
-        .then(function(res) {
-          console.log(res);
-        })
-        .catch(function(err) {
-          console.log(err);
-        });
-    },
+    handleSubmit() {
+      this.searchItems(this.queries);
+    }
   }
 };
 </script>
