@@ -20,6 +20,7 @@
 }
 .title {
   color: #fff;
+  border-bottom: 1px solid #7f7f7f;
   background-color: #6c757d;
   padding: 10px 15px;
   margin: 0px;
