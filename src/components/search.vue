@@ -8,15 +8,15 @@
       <a-col :span="24">
         <a-form :form="form" @submit.prevent="handleSubmit">
           <a-row>
-            <a-checkbox-group class="form-item" @change="onTagsChange">
-              <a-col :span="4" v-for="tag in allTags" :key="tag.id">
+            <a-checkbox-group class="form-item" @change="onCategoriesChange">
+              <a-col :span="4" v-for="tag in allCategories" :key="tag.id">
                 <a-checkbox :value="tag.id">{{tag.title}}</a-checkbox>
               </a-col>
             </a-checkbox-group>
 
             <a-checkbox-group class="form-item" @change="onSitesChange">
-              <a-col :span="2" v-for="siteIdx in 22" :key="siteIdx">
-                <a-checkbox :value="siteIdx">
+              <a-col :span="2" v-for="site in allSites" :key="site.id">
+                <a-checkbox :value="site.id">
                   <img src="../assets/images/samsung.png" width="30" />
                 </a-checkbox>
               </a-col>
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import axios from "axios";
 
 export default {
@@ -76,7 +76,7 @@ export default {
   data() {
     return {
       search_queries: {
-        tags: {},
+        categories: {},
         sites: {},
         keyword: ""
       }
@@ -84,12 +84,17 @@ export default {
   },
   computed: {
     ...mapState({
-      allTags: state => state.sites.allTags
+      allCategories: state => state.sites.allCategories,
+      allSites: state => state.sites.allSites
     })
   },
+  mounted() {
+    this.getAllSites();
+  },
   methods: {
-    onTagsChange(tags) {
-      this.search_queries["tags"] = tags;
+    ...mapActions("sites", ["getAllSites"]),
+    onCategoriesChange(categories) {
+      this.search_queries["categories"] = categories;
     },
     onSitesChange(sites) {
       this.search_queries["sites"] = sites;

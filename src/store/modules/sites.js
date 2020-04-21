@@ -1,8 +1,10 @@
+import axios from 'axios';
+
 export default {
   namespaced: true,
 
   state: {
-    allTags: [{
+    allCategories: [{
       id: 'department-store',
       title: 'Department store'
     }, {
@@ -26,6 +28,22 @@ export default {
     }, {
       id: 'sporting',
       title: 'Sporting'
-    }]
+    }],
+    allSites: []
+  },
+  actions: {
+    getAllSites(context) {
+      axios.get(process.env.VUE_APP_API_ENDPOINT + '/get-sites').then(function (res) {
+        context.commit('setAllSites', res.data);
+      }).catch(function (err) {
+        console.log(err);
+        context.commit('setAllSites', [])
+      })
+    }
+  },
+  mutations: {
+    setAllSites: function (state, sites) {
+      state.allSites = sites
+    }
   }
 }
