@@ -5,26 +5,30 @@ export default {
 
   state: {
     items: [],
+    totalCount: 0,
+    lastQueries: {}
   },
   actions: {
-    searchItems: function (context, search_queries) {
+    searchItems: function (context, queries) {
       axios
         .post(
           process.env.VUE_APP_API_ENDPOINT + "/search-items",
-          search_queries
+          queries
         )
         .then(function (res) {
-          context.commit('setItems', res.data);
+          context.commit('setSearchResults', { items: res.data['items'], totalCount: res.data['totalCount'], queries });
         })
         .catch(function (err) {
           console.log(err)
-          context.commit('setItems', []);
+          context.commit('setSearchResults', [], 0, queries);
         });
     }
   },
   mutations: {
-    setItems: function (state, items) {
-      state.items = items
+    setSearchResults: function (state, data) {
+      state.items = data['items'];
+      state.totalCount = data['totalCount'];
+      state.lastQueries = data['queries'];
     }
   }
 }

@@ -31,7 +31,7 @@
                       class="min-price"
                       :formatter="value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
                       :parser="value => value.replace(/\$\s?|(,*)/g, '')"
-                      v-model="queries['min_price']"
+                      v-model="queries['minPrice']"
                     />
                   </a-col>
                   <a-col :span="12">
@@ -40,7 +40,7 @@
                       class="max-price"
                       :formatter="value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
                       :parser="value => value.replace(/\$\s?|(,*)/g, '')"
-                      v-model="queries['max_price']"
+                      v-model="queries['maxPrice']"
                     />
                   </a-col>
                 </a-row>
