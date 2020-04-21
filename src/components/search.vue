@@ -17,7 +17,7 @@
             <a-checkbox-group class="form-item" @change="onSitesChange">
               <a-col :span="2" v-for="site in allSites" :key="site.id">
                 <a-checkbox :value="site.id">
-                  <img src="../assets/images/samsung.png" width="30" />
+                  <img :src="require('../assets/images/'+site.site+'.png')" width="16" />
                 </a-checkbox>
               </a-col>
             </a-checkbox-group>
@@ -113,7 +113,7 @@ export default {
         .catch(function(err) {
           console.log(err);
         });
-    }
+    },
   }
 };
 </script>
