@@ -33,7 +33,7 @@ export default {
   },
   actions: {
     getAllSites(context) {
-      axios.get(process.env.VUE_APP_API_ENDPOINT + '/get-sites').then(function (res) {
+      axios.get(process.env.VUE_APP_API_ENDPOINT + '/sites').then(function (res) {
         context.commit('setAllSites', res.data);
       }).catch(function (err) {
         console.log(err);
@@ -42,7 +42,7 @@ export default {
     }
   },
   mutations: {
-    setAllSites: function (state, sites) {
+    setAllSites(state, sites) {
       state.allSites = sites
     }
   }

@@ -69,8 +69,9 @@
 import { mapState, mapActions } from "vuex";
 
 export default {
-  beforeCreate() {
+  beforeMount() {
     this.form = this.$form.createForm(this, { name: "search" });
+    this.getAllSites();
   },
   data() {
     return {
@@ -86,9 +87,6 @@ export default {
       allCategories: state => state.sites.allCategories,
       allSites: state => state.sites.allSites
     })
-  },
-  mounted() {
-    this.getAllSites();
   },
   methods: {
     ...mapActions("sites", ["getAllSites"]),
