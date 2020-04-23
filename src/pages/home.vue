@@ -1,6 +1,6 @@
 <template>
   <a-layout type="flex" class="homepage">
-    <a-row :gutter="[15,20]">
+    <a-row :gutter="[15,20]" v-if="userId">
       <a-col class="area" :span="12">
         <WelcomeComponent />
       </a-col>
@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 import WelcomeComponent from "../components/welcome";
 import SearchComponent from "../components/search";
 import SearchResultsComponent from "../components/search-results";
@@ -29,6 +31,15 @@ export default {
     SearchComponent,
     SearchResultsComponent,
     MyListComponent
+  },
+
+  computed: {
+    ...mapState({
+      userId: state => state.user.id
+    })
+  },
+  mounted() {
+    if (!this.userId) this.$router.replace("/login");
   }
 };
 </script>

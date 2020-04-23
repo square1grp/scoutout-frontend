@@ -1,15 +1,11 @@
 <template>
   <a-row class="h-100-vh" type="flex" justify="center" align="middle">
     <a-col :span="4">
-      <a-form
-        :form="form"
-        class="login-form"
-        @submit="handleSubmit"
-      >
+      <a-form :form="form" class="login-form" @submit="handleSubmit">
         <a-form-item>
           <a-input
             v-decorator="[
-              'userName',
+              'username',
               { 
                 initialValue: 'username',
                 rules: [{ required: true, message: 'Please input your username!' }] 
@@ -55,17 +51,27 @@
 </template>
 
 <script scoped>
+import { mapState, mapActions } from "vuex";
+
 export default {
   beforeCreate() {
     this.form = this.$form.createForm(this, { name: "normal_login" });
   },
+  computed: {
+    ...mapState({
+      userId: state => state.user.id
+    })
+  },
   methods: {
+    ...mapActions("user", ["userLogin"]),
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log("Received values of form: ", values);
-          this.$router.push("/home");
+          this.userLogin({
+            username: values.username,
+            password: values.password
+          });
         }
       });
     }

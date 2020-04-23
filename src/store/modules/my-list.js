@@ -16,11 +16,10 @@ export default {
           process.env.VUE_APP_API_ENDPOINT + "/user-list",
           { params: { 'userId': userId } }
         )
-        .then(function (res) {
+        .then((res) => {
           context.commit('setLists', res.data);
         })
-        .catch(function (err) {
-          console.log(err);
+        .catch(() => {
           context.commit('setLists', []);
         });
     },
@@ -29,21 +28,18 @@ export default {
         .post(
           process.env.VUE_APP_API_ENDPOINT + "/user-list",
           { 'userId': userId }
-        ).then(function (res) {
+        ).then((res) => {
           context.commit('createList', res.data)
-        }).catch(function (err) {
-          console.log(err);
-        });
+        }).catch(() => { });
     },
     deleteList(context, payLoad) {
       axios
         .delete(
           process.env.VUE_APP_API_ENDPOINT + "/user-list",
           { data: payLoad }
-        ).then((res) => {
-          console.log(res);
+        ).then(() => {
           context.commit('deleteList', payLoad['id']);
-        }).catch(err => console.log(err));
+        }).catch(() => { });
     },
     selectItems(context, items) {
       context.commit('selectItems', items);
@@ -55,19 +51,16 @@ export default {
           payLoad
         ).then(res => {
           context.commit('selectItems', res.data);
-        }).catch(err => {
-          console.log(err);
-        });
+        }).catch(() => { });
     },
     deleteItemFromList(context, payLoad) {
       axios
         .delete(
           process.env.VUE_APP_API_ENDPOINT + "/user-list/delete-item",
           { data: payLoad }
-        ).then((res) => {
-          console.log(res);
+        ).then(() => {
           context.commit('deleteItemFromList', payLoad)
-        }).catch(err => console.log(err));
+        }).catch(() => { });
     },
     setActiveListId(context, listId) {
       context.commit('setActiveListId', listId)
@@ -93,7 +86,6 @@ export default {
         return list;
       });
       state.selectedItems = items;
-      console.log(items)
       state.selectedItemIds = items.map(item => item.id);
     },
     setActiveListId(state, listId) {

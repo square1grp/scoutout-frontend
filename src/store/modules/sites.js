@@ -33,10 +33,9 @@ export default {
   },
   actions: {
     getAllSites(context) {
-      axios.get(process.env.VUE_APP_API_ENDPOINT + '/sites').then(function (res) {
+      axios.get(process.env.VUE_APP_API_ENDPOINT + '/sites').then((res) => {
         context.commit('setAllSites', res.data);
-      }).catch(function (err) {
-        console.log(err);
+      }).catch(() => {
         context.commit('setAllSites', [])
       })
     }

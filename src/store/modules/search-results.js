@@ -15,11 +15,10 @@ export default {
           process.env.VUE_APP_API_ENDPOINT + "/search-items",
           queries
         )
-        .then(function (res) {
+        .then((res) => {
           context.commit('setSearchResults', { items: res.data['items'], totalCount: res.data['totalCount'], queries });
         })
-        .catch(function (err) {
-          console.log(err)
+        .catch(() => {
           context.commit('setSearchResults', { items: [], totalCount: 0, queries });
         });
     }
