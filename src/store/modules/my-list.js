@@ -5,6 +5,7 @@ export default {
 
   state: {
     lists: [],
+    activeListId: null,
     selectedItemIds: [],
     selectedItems: [],
   },
@@ -53,33 +54,43 @@ export default {
           process.env.VUE_APP_API_ENDPOINT + "/user-list/add-items",
           payLoad
         ).then(res => {
-          console.log(res)
+          context.commit('selectItems', res.data);
         }).catch(err => {
           console.log(err);
         });
+    },
+    deleteITemFromList(context, itemId) {
+
+    },
+    setActiveListId(context, listId) {
+      context.commit('setActiveListId', listId)
     }
   },
   mutations: {
     setLists(state, lists) {
       state.lists = lists;
-      state.selectItems = lists[0].items;
-      state.selectedItemIds = []
-      lists[0].items.forEach(item => {
-        state.selectedItemIds.push(item.id);
-      });
+      state.selectedItems = lists[0].items;
+      state.selectedItemIds = lists[0].items.map(item => item.id);
     },
     createList(state, list) {
-      state.lists.push(list);
+      state.lists.push({ id: list.id, user_id: list.user_id, items: [] });
     },
     deleteList(state, listId) {
       state.lists = state.lists.filter(list => list.id != listId);
     },
     selectItems(state, items) {
-      items.forEach(item => {
-        if (!state.selectedItemIds.includes(item.id)) {
-          state.selectedItems.push(item);
+      state.lists = state.lists.map(list => {
+        if (list.id == state.activeListId) {
+          list.items = items;
         }
+        return list;
       });
+      state.selectedItems = items;
+      console.log(items)
+      state.selectedItemIds = items.map(item => item.id);
     },
+    setActiveListId(state, listId) {
+      state.activeListId = listId;
+    }
   }
 }

@@ -56,6 +56,10 @@ export default {
       onChange: (selectedRowKeys, selectedItems) => {
         this.rowSelection.selectedRowKeys = selectedRowKeys;
         this.selectItems(selectedItems);
+        this.addItemsToList({
+          listId: this.activeListId,
+          itemIds: selectedRowKeys
+        });
       }
     };
 
@@ -71,12 +75,13 @@ export default {
       items: state => state.searchResults.items,
       totalCount: state => state.searchResults.totalCount,
       lastQueries: state => state.searchResults.lastQueries,
-      selectedItemIds: state => state.myList.selectedItemIds
+      selectedItemIds: state => state.myList.selectedItemIds,
+      activeListId: state => state.myList.activeListId
     })
   },
   methods: {
     ...mapActions("searchResults", ["searchItems"]),
-    ...mapActions("myList", ["selectItems"]),
+    ...mapActions("myList", ["selectItems", "addItemsToList"]),
     handleTableChange(pagination) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
@@ -96,8 +101,8 @@ export default {
     items() {
       this.loading = false;
     },
-    selectedItemIds(newSelectedItems) {
-      this.rowSelection.selectedRowKeys = newSelectedItems;
+    selectedItemIds(newSelectedItemIds) {
+      this.rowSelection.selectedRowKeys = newSelectedItemIds;
     }
   }
 };

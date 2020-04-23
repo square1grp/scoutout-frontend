@@ -24,13 +24,20 @@
             :closable="listTab.closable"
           >
             <a-table
-              :rowSelection="rowSelection"
               :columns="columns"
-              :dataSource="listTab.items"
+              :dataSource="selectedItems"
               :rowKey="record=>record.id"
               :pagination="pagination"
               :scroll="{ y: 390 }"
-            />
+            >
+              <template slot="delete" slot-scope="record">
+                <a-popconfirm title="Sure to delete?" @confirm="() => onDeleteItem(record.id)">
+                  <a href="javascript:;">
+                    <a-icon type="delete" />
+                  </a>
+                </a-popconfirm>
+              </template>
+            </a-table>
           </a-tab-pane>
         </a-tabs>
       </a-col>
@@ -54,26 +61,21 @@ const columns = [
   {
     title: "Store",
     dataIndex: "site",
-    width: "15%",
-    scopedSlots: { customRender: "site" }
+    width: "15%"
+  },
+  {
+    title: "",
+    width: "10%",
+    scopedSlots: { customRender: "delete" }
   }
 ];
 
 export default {
   data() {
-    const rowSelection = {
-      selectedRowKeys: [],
-      onChange: (selectedRowKeys, selectedRows) => {
-        this.rowSelection.selectedRowKeys = selectedRowKeys;
-      }
-    };
-
     return {
-      listTabs: [],
       activeListId: null,
       pagination: { pageSize: 25 },
-      columns,
-      rowSelection
+      columns
     };
   },
   beforeMount() {
@@ -84,7 +86,22 @@ export default {
       userId: state => state.user.id,
       lists: state => state.myList.lists,
       selectedItems: state => state.myList.selectedItems
-    })
+    }),
+    listTabs() {
+      const listTabs = this.lists.map(list => {
+        return {
+          id: list.id,
+          title: `My List ${list.id}`,
+          items: list.items
+        };
+      });
+
+      if (!this.activeListId) {
+        this.activeListId = listTabs.length ? listTabs[0].id : null;
+      }
+
+      return listTabs;
+    }
   },
   methods: {
     ...mapActions("myList", [
@@ -92,7 +109,7 @@ export default {
       "createList",
       "deleteList",
       "selectItems",
-      "addItemsToList"
+      "setActiveListId"
     ]),
     newList() {
       this.createList(this.userId);
@@ -103,31 +120,12 @@ export default {
       }
     },
     changeListTab(listId) {
-      this.selectItems([]);
-    }
-  },
-  watch: {
-    lists(newLists) {
-      this.listTabs = [];
-
-      newLists.forEach(list => {
-        this.listTabs.push({
-          id: list.id,
-          title: `My List ${list.id}`,
-          items: list.items,
-          totalCount: []
-        });
-      });
-
-      if (!this.activeListId) {
-        this.activeListId = this.listTabs.length ? this.listTabs[0].id : null;
-      }
+      this.setActiveListId(listId);
+      const list = this.lists.filter(list => list.id == listId)[0];
+      this.selectItems(list.items);
     },
-    selectedItems(newItems) {
-      this.addItemsToList({
-        listId: this.activeListId,
-        itemIds: newItems.map(item => item.id)
-      });
+    onDeleteItem(itemId) {
+      console.log(itemId);
     }
   }
 };
