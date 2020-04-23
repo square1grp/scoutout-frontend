@@ -109,7 +109,8 @@ export default {
       "createList",
       "deleteList",
       "selectItems",
-      "setActiveListId"
+      "setActiveListId",
+      "deleteItemFromList"
     ]),
     newList() {
       this.createList(this.userId);
@@ -125,7 +126,10 @@ export default {
       this.selectItems(list.items);
     },
     onDeleteItem(itemId) {
-      console.log(itemId);
+      this.deleteItemFromList({
+        listId: this.activeListId,
+        itemId: itemId
+      });
     }
   }
 };

@@ -59,8 +59,15 @@ export default {
           console.log(err);
         });
     },
-    deleteITemFromList(context, itemId) {
-
+    deleteItemFromList(context, payLoad) {
+      axios
+        .delete(
+          process.env.VUE_APP_API_ENDPOINT + "/user-list/delete-item",
+          { data: payLoad }
+        ).then((res) => {
+          console.log(res);
+          context.commit('deleteItemFromList', payLoad)
+        }).catch(err => console.log(err));
     },
     setActiveListId(context, listId) {
       context.commit('setActiveListId', listId)
@@ -91,6 +98,20 @@ export default {
     },
     setActiveListId(state, listId) {
       state.activeListId = listId;
+    },
+    deleteItemFromList(state, payLoad) {
+      const listId = payLoad['listId'];
+      const itemId = payLoad['itemId'];
+
+      state.lists = state.lists.map(list => {
+        if (list.id == listId) {
+          list.items = list.items.filter(item => item.id != itemId);
+        }
+
+        return list;
+      })
+      state.selectedItems = state.selectedItems.filter(item => item.id != itemId);
+      state.selectedItemIds = state.selectedItemIds.filter(_itemId => _itemId != itemId);
     }
   }
 }
