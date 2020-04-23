@@ -1,3 +1,10 @@
 .h-100-vh {
   height: 100vh;
 }
+
+.homepage .welcome,
+.homepage .search,
+.homepage .search-results,
+.homepage .my-list {
+  min-height: 450px;
+}

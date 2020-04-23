@@ -5,7 +5,7 @@
         <h3 class="title">Search Results</h3>
       </a-col>
 
-      <a-col :span="24">
+      <a-col class="table-container" :span="24">
         <a-table
           :rowSelection="rowSelection"
           :columns="columns"
@@ -14,6 +14,7 @@
           :pagination="pagination"
           :loading="loading"
           @change="handleTableChange"
+          :scroll="{ y: 500 }"
         >
           <img
             slot="site"
@@ -48,26 +49,18 @@ const columns = [
   }
 ];
 
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(
-      `selectedRowKeys: ${selectedRowKeys}`,
-      "selectedRows: ",
-      selectedRows
-    );
-  },
-  onSelect: (record, selected, selectedRows) => {
-    console.log(record, selected, selectedRows);
-  },
-  onSelectAll: (selected, selectedRows, changeRows) => {
-    console.log(selected, selectedRows, changeRows);
-  }
-};
-
 export default {
   data() {
+    const rowSelection = {
+      selectedRowKeys: [],
+      onChange: (selectedRowKeys, selectedItems) => {
+        this.rowSelection.selectedRowKeys = selectedRowKeys;
+        this.selectItems(selectedItems);
+      }
+    };
+
     return {
-      pagination: {},
+      pagination: { pageSize: 25 },
       loading: false,
       columns,
       rowSelection
@@ -77,11 +70,13 @@ export default {
     ...mapState({
       items: state => state.searchResults.items,
       totalCount: state => state.searchResults.totalCount,
-      lastQueries: state => state.searchResults.lastQueries
+      lastQueries: state => state.searchResults.lastQueries,
+      selectedItemIds: state => state.myList.selectedItemIds
     })
   },
   methods: {
     ...mapActions("searchResults", ["searchItems"]),
+    ...mapActions("myList", ["selectItems"]),
     handleTableChange(pagination) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
@@ -100,6 +95,9 @@ export default {
     },
     items() {
       this.loading = false;
+    },
+    selectedItemIds(newSelectedItems) {
+      this.rowSelection.selectedRowKeys = newSelectedItems;
     }
   }
 };
@@ -107,7 +105,6 @@ export default {
 
 <style scoped>
 .search-results {
-  height: 100%;
   border: 1px solid #c1c1c1;
   border-radius: 4px;
 }
@@ -117,5 +114,8 @@ export default {
   border-bottom: 1px solid #c1c1c1;
   padding: 10px 15px;
   margin: 0px;
+}
+.table-container {
+  padding: 15px;
 }
 </style>

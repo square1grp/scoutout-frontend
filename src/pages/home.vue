@@ -1,6 +1,6 @@
 <template>
   <a-layout type="flex" class="homepage">
-    <a-row :gutter="[15,30]">
+    <a-row :gutter="[15,20]">
       <a-col class="area" :span="12">
         <WelcomeComponent />
       </a-col>
@@ -35,10 +35,7 @@ export default {
 
 <style scoped>
 .homepage {
-  padding: 50px 25px;
+  padding: 15px;
   background-color: #fff;
-}
-.area {
-  min-height: 440px;
 }
 </style>

@@ -5,6 +5,8 @@ export default {
 
   state: {
     lists: [],
+    selectedItemIds: [],
+    selectedItems: [],
   },
   actions: {
     getLists(context, userId) {
@@ -41,18 +43,43 @@ export default {
           console.log(res);
           context.commit('deleteList', payLoad['id']);
         }).catch(err => console.log(err));
+    },
+    selectItems(context, items) {
+      context.commit('selectItems', items);
+    },
+    addItemsToList(context, payLoad) {
+      axios
+        .post(
+          process.env.VUE_APP_API_ENDPOINT + "/user-list/add-items",
+          payLoad
+        ).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err);
+        });
     }
   },
   mutations: {
     setLists(state, lists) {
       state.lists = lists;
+      state.selectItems = lists[0].items;
+      state.selectedItemIds = []
+      lists[0].items.forEach(item => {
+        state.selectedItemIds.push(item.id);
+      });
     },
     createList(state, list) {
       state.lists.push(list);
     },
     deleteList(state, listId) {
-      console.log(listId)
       state.lists = state.lists.filter(list => list.id != listId);
-    }
+    },
+    selectItems(state, items) {
+      items.forEach(item => {
+        if (!state.selectedItemIds.includes(item.id)) {
+          state.selectedItems.push(item);
+        }
+      });
+    },
   }
 }

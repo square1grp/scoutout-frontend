@@ -14,7 +14,6 @@
 
 <style scoped>
 .welcome {
-  height: 100%;
   border: 1px solid #7f7f7f;
   border-radius: 4px;
 }

@@ -6,7 +6,7 @@
       </a-col>
 
       <a-col :span="24">
-        <a-form :form="form" @submit.prevent="handleSubmit">
+        <a-form class="search-form" :form="form" @submit.prevent="handleSubmit">
           <a-row>
             <a-checkbox-group class="form-item" @change="onCategoriesChange">
               <a-col :span="4" v-for="tag in allCategories" :key="tag.id">
@@ -106,7 +106,6 @@ export default {
 
 <style scoped>
 .search {
-  height: 100%;
   border: 1px solid #007bff;
   border-radius: 4px;
 }
@@ -117,12 +116,13 @@ export default {
   padding: 10px 15px;
   margin: 0px;
 }
+.search-form {
+  padding: 30px 15px;
+}
 .form-item {
   width: 100%;
-  padding-left: 15px;
-  padding-right: 15px;
-  margin-top: 8px;
-  margin-bottom: 16px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 .min-price,
 .max-price {
