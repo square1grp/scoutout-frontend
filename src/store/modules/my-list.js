@@ -77,6 +77,8 @@ export default {
     },
     deleteList(state, listId) {
       state.lists = state.lists.filter(list => list.id != listId);
+      if (state.lists.length)
+        state.activeListId = state.lists[state.lists.length - 1].id;
     },
     selectItems(state, items) {
       state.lists = state.lists.map(list => {
