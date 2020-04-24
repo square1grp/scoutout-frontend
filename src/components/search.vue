@@ -9,8 +9,8 @@
         <a-form class="search-form" :form="form" @submit.prevent="handleSubmit">
           <a-row>
             <a-checkbox-group class="form-item" @change="onCategoriesChange">
-              <a-col :span="4" v-for="tag in allCategories" :key="tag.id">
-                <a-checkbox :value="tag.id">{{tag.title}}</a-checkbox>
+              <a-col :span="4" v-for="cat in allCategories" :key="cat.id">
+                <a-checkbox :value="cat.id">{{cat.title}}</a-checkbox>
               </a-col>
             </a-checkbox-group>
 
@@ -81,6 +81,9 @@ export default {
         keyword: ""
       }
     };
+  },
+  mounted() {
+    this.searchItems(this.queries);
   },
   computed: {
     ...mapState({

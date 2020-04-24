@@ -22,6 +22,14 @@
             :src="require('../assets/images/'+site+'.png')"
             width="16"
           />
+          <template slot="history" slot-scope="item, record">
+            <a-popover title>
+              <template slot="content">
+                <PTHistoryComponent :histories="record.histories" :style="{height: '200px'}" />
+              </template>
+              <p :style="{margin: 0}">{{item}}</p>
+            </a-popover>
+          </template>
         </a-table>
       </a-col>
     </a-row>
@@ -30,6 +38,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import PTHistoryComponent from "./pt-history.js";
 
 const columns = [
   {
@@ -40,7 +49,8 @@ const columns = [
   },
   {
     title: "Item",
-    dataIndex: "item"
+    dataIndex: "item",
+    scopedSlots: { customRender: "history" }
   },
   {
     title: "Price",
@@ -50,6 +60,9 @@ const columns = [
 ];
 
 export default {
+  components: {
+    PTHistoryComponent
+  },
   data() {
     const rowSelection = {
       selectedRowKeys: [],
