@@ -64,13 +64,22 @@ export default {
     },
     setActiveListId(context, listId) {
       context.commit('setActiveListId', listId)
+    },
+    setItemListName(context, payLoad) {
+      axios
+        .post(
+          process.env.VUE_APP_API_ENDPOINT + "/user-list/change-name",
+          payLoad
+        ).then(() => {
+          context.commit('setItemListName', payLoad);
+        }).catch(() => { });
     }
   },
   mutations: {
     setLists(state, lists) {
       state.lists = lists;
-      state.selectedItems = lists[0].items;
-      state.selectedItemIds = lists[0].items.map(item => item.id);
+      state.selectedItems = lists.length ? lists[0].items : [];
+      state.selectedItemIds = lists.length ? lists[0].items.map(item => item.id) : [];
     },
     createList(state, list) {
       state.lists.push({ id: list.id, user_id: list.user_id, items: [] });
@@ -106,6 +115,14 @@ export default {
       })
       state.selectedItems = state.selectedItems.filter(item => item.id != itemId);
       state.selectedItemIds = state.selectedItemIds.filter(_itemId => _itemId != itemId);
+    },
+    setItemListName(state, payLoad) {
+      state.lists = state.lists.map(list => {
+        if (list.id == payLoad['listId'])
+          list.name = payLoad['listName'];
+
+        return list;
+      })
     }
   }
 }

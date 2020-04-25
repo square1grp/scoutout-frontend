@@ -6,9 +6,19 @@
       </a-col>
 
       <a-col class="list-tabs-container" :span="24">
-        <div :style="{ marginBottom: '16px' }">
-          <a-button type="primary" @click="newList">Create a new list</a-button>
-        </div>
+        <a-row :style="{ marginBottom: '16px' }">
+          <a-col :span="8">
+            <a-button type="primary" @click="newList">Create a new list</a-button>
+          </a-col>
+
+          <a-col :span="12">
+            <a-input-search
+              :placeholder="activeListName"
+              @search="onChangeCurrentTabName"
+              enterButton="Change"
+            />
+          </a-col>
+        </a-row>
 
         <a-tabs
           hideAdd
@@ -19,7 +29,7 @@
         >
           <a-tab-pane
             v-for="listTab in listTabs"
-            :tab="listTab.title"
+            :tab="listTab.name"
             :key="listTab.id"
             :closable="listTab.closable"
           >
@@ -47,6 +57,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import moment from "moment";
 
 const columns = [
   {
@@ -74,6 +85,7 @@ export default {
   data() {
     return {
       activeListId: null,
+      activeListName: null,
       pagination: { pageSize: 25 },
       columns
     };
@@ -91,13 +103,14 @@ export default {
       const listTabs = this.lists.map(list => {
         return {
           id: list.id,
-          title: `My List ${list.id}`,
+          name: list.name,
           items: list.items
         };
       });
 
       if (!this.activeListId) {
         this.activeListId = listTabs.length ? listTabs[0].id : null;
+        this.activeListName = listTabs.length ? listTabs[0].name : null;
       }
 
       return listTabs;
@@ -110,10 +123,12 @@ export default {
       "deleteList",
       "selectItems",
       "setActiveListId",
-      "deleteItemFromList"
+      "deleteItemFromList",
+      "setItemListName"
     ]),
     newList() {
       this.createList(this.userId);
+      this.activeListName = `My List ${moment().format("L")}`;
     },
     onUpdateListTab(listId, action) {
       if (action == "remove") {
@@ -121,8 +136,9 @@ export default {
       }
     },
     changeListTab(listId) {
-      this.setActiveListId(listId);
       const list = this.lists.filter(list => list.id == listId)[0];
+      this.activeListName = list.name;
+      this.setActiveListId(listId);
       this.selectItems(list.items);
     },
     onDeleteItem(itemId) {
@@ -130,6 +146,16 @@ export default {
         listId: this.activeListId,
         itemId: itemId
       });
+    },
+    onChangeCurrentTabName(newListName) {
+      if (this.activeListId && newListName) {
+        this.setItemListName({
+          listId: this.activeListId,
+          listName: newListName
+        });
+
+        this.activeListName = newListName;
+      }
     }
   }
 };
