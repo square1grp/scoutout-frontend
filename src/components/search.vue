@@ -82,9 +82,6 @@ export default {
       }
     };
   },
-  mounted() {
-    this.searchItems(this.queries);
-  },
   computed: {
     ...mapState({
       allCategories: state => state.sites.allCategories,
