@@ -82,7 +82,7 @@ export default {
       state.selectedItemIds = lists.length ? lists[0].items.map(item => item.id) : [];
     },
     createList(state, list) {
-      state.lists.push({ id: list.id, user_id: list.user_id, items: [] });
+      state.lists.push({ id: list.id, user_id: list.user_id, items: [], name: list.name });
     },
     deleteList(state, listId) {
       state.lists = state.lists.filter(list => list.id != listId);

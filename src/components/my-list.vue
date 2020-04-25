@@ -108,11 +108,6 @@ export default {
         };
       });
 
-      if (!this.activeListId) {
-        this.activeListId = listTabs.length ? listTabs[0].id : null;
-        this.activeListName = listTabs.length ? listTabs[0].name : null;
-      }
-
       return listTabs;
     }
   },
@@ -129,6 +124,7 @@ export default {
     newList() {
       this.createList(this.userId);
       this.activeListName = `My List ${moment().format("L")}`;
+      console.log(this.activeListName);
     },
     onUpdateListTab(listId, action) {
       if (action == "remove") {
@@ -155,6 +151,21 @@ export default {
         });
 
         this.activeListName = newListName;
+      }
+    }
+  },
+  watch: {
+    lists(newLists) {
+      if (!this.activeListId || !this.activeListName) {
+        let listTabs = newLists.map(list => {
+          return {
+            id: list.id,
+            name: list.name,
+          };
+        });
+        
+        this.activeListId = listTabs.length ? listTabs[0].id : null;
+        this.activeListName = listTabs.length ? listTabs[0].name : null;
       }
     }
   }
