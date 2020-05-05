@@ -7,7 +7,7 @@
             v-decorator="[
               'username',
               { 
-                initialValue: 'username',
+                initialValue: 'test@gmail.com',
                 rules: [{ required: true, message: 'Please input your username!' }] 
               },
             ]"

@@ -17,6 +17,7 @@
                     message: 'Please input your E-mail!',
                   },
                 ],
+                initialValue:defaultFormData.email
               },
             ]"
           />
@@ -27,6 +28,7 @@
               'firstname',
               {
                 rules: [{ required: true, message: 'Please input your first name!', whitespace: true }],
+                initialValue:defaultFormData.firstname
               },
             ]"
           />
@@ -37,6 +39,7 @@
               'lastname',
               {
                 rules: [{ required: true, message: 'Please input your last name!', whitespace: true }],
+                initialValue:defaultFormData.lastname
               },
             ]"
           />
@@ -55,6 +58,7 @@
                     validator: validateToNextPassword,
                   },
                 ],
+                initialValue:defaultFormData.password
               },
             ]"
             type="password"
@@ -74,6 +78,7 @@
                     validator: compareToFirstPassword,
                   },
                 ],
+                initialValue:defaultFormData.confirm_password
               },
             ]"
             type="password"
@@ -82,7 +87,12 @@
         </a-form-item>
         <a-form-item v-bind="tailFormItemLayout">
           <a-checkbox
-            v-decorator="['agreement', { rules: [{required: true, message: 'Please read the agreement.'}] }]"
+            v-decorator="[
+              'agreement', 
+              { 
+                rules: [{required: true, message: 'Please read the agreement.'}],
+              }
+            ]"
           >
             I have read the
             <a href>agreement</a>
@@ -98,11 +108,18 @@
 </template>
 
 <script scoped>
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   data() {
     return {
+      defaultFormData: {
+        email: "test@gmail.com",
+        firstname: "John",
+        lastname: "Doe",
+        password: "password",
+        confirm_password: "password"
+      },
       confirmDirty: false,
       autoCompleteResult: [],
       formItemLayout: {
