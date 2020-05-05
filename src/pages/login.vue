@@ -33,17 +33,11 @@
         </a-form-item>
         <a-form-item>
           <a-checkbox
-            v-decorator="[
-          'remember',
-          {
-            valuePropName: 'checked',
-            initialValue: true,
-          },
-        ]"
+            v-decorator="['remember', {valuePropName: 'checked', initialValue: true}]"
           >Remember me</a-checkbox>
           <a class="login-form-forgot" href>Forgot password</a>
           <a-button type="primary" html-type="submit" class="login-form-button">Log in</a-button>Or
-          <a href>register now!</a>
+          <a href="/register">register now!</a>
         </a-form-item>
       </a-form>
     </a-col>
